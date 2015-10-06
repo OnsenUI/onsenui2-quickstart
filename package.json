@@ -1,6 +1,6 @@
 {
   "name": "onsen2-quickstart",
-  "version": "2.0.0-beta",
+  "version": "2.0.0-alpha",
   "private": false,
   "description": "Get up and running quickly with Onsen UI 2.0",
   "main": "gulpfile.js",
