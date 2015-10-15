@@ -1,0 +1,21 @@
+{
+  "name": "onsen2-quickstart",
+  "homepage": "http://onsen.io/",
+  "authors": [
+    "Onsen UI Team <team@monaca.io>"
+  ],
+  "description": "Quickstart repo for Onsen UI 2.0",
+  "main": "",
+  "moduleType": [],
+  "license": "Apache-2.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "onsenui": "2.0.0-alpha.2"
+  }
+}

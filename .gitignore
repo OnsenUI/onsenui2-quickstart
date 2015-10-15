@@ -1,2 +1,4 @@
-/platform/*
-
+/platforms
+/plugins
+/bower_components
+/node_modules

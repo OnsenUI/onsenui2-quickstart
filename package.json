@@ -16,5 +16,16 @@
   "bugs": {
     "url": "https://github.com/OnsenUI/onsen2-quickstart/issues"
   },
-  "homepage": "https://github.com/OnsenUI/onsen2-quickstart#readme"
+  "homepage": "https://github.com/OnsenUI/onsen2-quickstart#readme",
+  "devDependencies": {
+    "browser-sync": "^2.9.11",
+    "gulp": "^3.9.0",
+    "gulp-bower": "0.0.10",
+    "gulp-filter": "^3.0.1",
+    "gulp-ignore": "^2.0.1",
+    "gulp-livereload": "^3.8.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-serve": "^1.2.0",
+    "rimraf": "^2.4.3"
+  }
 }
