@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="app">
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -13,58 +13,127 @@
     <link rel="stylesheet" href="app.css" type="text/css" media="all" />
 
     <script src="../lib/onsenui/js/onsenui.js"></script>
-    <script src="app.js"></script>
+    <script src="../lib/react/react.js"></script>
+    <script src="../lib/react/react-dom.js"></script>
+    <script src="../lib/jquery/dist/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+
+    <style>
+      .todo-checkbox {
+        display: inline !important;
+        margin-right: 30px;
+      }
+    </style>
+
+    <script type="text/babel">
+      var TodoItem = React.createClass({
+        getInitialState: function() {
+          return {
+            edit: false
+          };
+        },
+        toggleEdit: function() {
+          this.setState({edit: !this.state.edit});
+        },
+        onTitleChange: function(event) {
+          this.props.onTitleChange(event.target.value);
+        },
+        componentDidMount: function() {
+          $(ReactDOM.findDOMNode(this)).on('change', 'ons-material-input', this.onTitleChange);
+        },
+        componentWillUnmount: function() {
+          $(ReactDOM.findDOMNode(this)).off('change', 'ons-material-input', this.onTitleChange);
+        },
+        componentDidUpdate: function() {
+          // Focus the input.
+          if (this.state.edit) {
+            this.refs.titleInput.querySelector('input').focus();
+          }
+        },
+        render: function() {
+          return (
+            <ons-list-item modifier="material">
+              <label className="checkbox checkbox--material todo-checkbox">
+                <input type="checkbox" checked={this.props.done} onChange={this.props.onToggle} className="checkbox__input checkbox--material__input" />
+                <div className="checkbox__checkmark checkbox--material__checkmark"></div>
+              </label>
+              { this.state.edit ?
+                <ons-material-input ref="titleInput" onChange={this.onTitleChange} onBlur={this.toggleEdit} label="Title"></ons-material-input> :
+                <span onClick={this.toggleEdit}>{this.props.title}</span>
+              }
+            </ons-list-item>
+          );
+        }
+      });
+
+      var TodoApp = React.createClass({
+        getInitialState: function() {
+          return {
+            todos: [
+              {
+                title: 'Water the plants',
+                done: false,
+              },
+              {
+                title: 'Walk the dog',
+                done: true,
+              },
+              {
+                title: 'Go to the dentist',
+                done: false,
+              },
+              {
+                title: 'Buy milk',
+                done: false,
+              },
+              {
+                title: 'Play tennis',
+                done: true,
+              }
+            ]
+          };
+        },
+        toggleItem: function(i) {
+          var todos = this.state.todos;
+          todos[i].done = !todos[i].done;
+          this.setState({todos: todos});
+        },
+        titleChange: function(i, title) {
+          var todos = this.state.todos;
+          todos[i].title = title;
+          this.setState({todos: todos});
+        },
+        render: function() {
+          return (
+            <ons-list modifier="material">
+              <ons-list-header modifier="material">Things to do</ons-list-header>
+              {this.state.todos.map(function(todo, i) {
+                  return <TodoItem
+                    key={i}
+                    onToggle={this.toggleItem.bind(this, i)}
+                    onTitleChange={this.titleChange.bind(this, i)}
+                    done={todo.done}
+                    title={todo.title}>
+                  </TodoItem>
+              }.bind(this))}
+            </ons-list>
+          );
+        }
+      });
+
+      ReactDOM.render(<TodoApp />, document.getElementById('app'));
+    </script>
 </head>
 
 <body>
-  <ons-splitter>
-    <ons-splitter-side var="menu" side="left" width="80%" collapse swipeable>
-      <ons-page modifier="material">
-        <ons-list modifier="material">
-          <ons-list-header modifier="material">Menu</ons-list-item>
-          <ons-list-item modifier="material">
-            This is a menu.
-          </ons-list-item>
-        </ons-list>
-      </ons-page>
-    </ons-splitter-side>
-    <ons-splitter-content page="todo.html"></ons-splitter-content>
-  </ons-splitter>
+  <ons-page>
+    <ons-toolbar modifier="material">
+      <div class="center">
+        Todos
+      </div>
+    </ons-toolbar>
 
-  <ons-template id="todo.html">
-    <ons-page modifier="material" ng-controller="TodoController as todo">
-      <ons-toolbar modifier="material">
-        <div class="left">
-          <ons-toolbar-button ng-click="menu.open()" modifier="material">
-            <ons-icon icon="md-menu"></ons-icon>
-          </ons-toolbar-button>
-        </div>
-        <div class="center">Todos</div>
-      </ons-toolbar>
-
-      <ons-list modifier="material">
-        <ons-list-header modifier="material">Things to do</ons-list-header>
-        <ons-list-item modifier="material" ng-repeat="item in todo.items">
-          <label class="checkbox checkbox--material">
-            <input type="checkbox" ng-model="item.done" class="checkbox__input checkbox--material__input">
-            <div class="checkbox__checkmark checkbox--material__checkmark"></div>
-          </label>
-          <ons-material-input ng-show="todo.selectedItem == $index" ng-model="item.title" ng-blur="todo.selectedItem = -1" label="Title"></ons-material-input>
-          <span id="todo-title" class="title" ng-class="{ 'done': item.done }" ng-hide="todo.selectedItem == $index" ng-click="todo.selectedItem = $index; todo.focusInput($event)">{{ item.title || 'Untitled item' }}</span>
-        </ons-list-item>
-        <ons-list-item style="text-align: center;">
-          <ons-button ng-click="todo.clearCompleted()" modifier="material--flat">
-          <ons-ripple color="rgba(0, 0, 0, 0.1)"></ons-ripple>
-          Clear completed items
-        </ons-button>
-        </ons-list-item>
-      </ons-list>
-
-      <ons-fab position="bottom right" ng-click="todo.newTodo()">
-        <ons-ripple color="rgba(255, 255, 255, 0.2)"></ons-ripple>
-        <ons-icon icon="md-plus" size="24px" style="line-height: 56px;"></ons-icon>
-      </ons-fab>
-    </ons-page>
-  </ons-template>
+    <div id="app"></div>
+  </ons-page>
 </body>
 </html>

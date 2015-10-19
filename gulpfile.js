@@ -7,7 +7,7 @@ var gulp = require('gulp'),
     browserSync = require('browser-sync').create();
 
 gulp.task('install', ['clean'], function(cb) {
-  var myFilter = filter(['angular/**', 'onsenui/build/{js,css}/**']);
+  var myFilter = filter(['jquery/**', 'react/**', 'angular/**', 'onsenui/build/{js,css}/**']);
 
   return bower()
     .pipe(myFilter)
