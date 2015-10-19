@@ -22,28 +22,26 @@
 
     <p>This is a simple app that showcases som of the features of Onsen UI 2.0</p>
 
-    <p>The first demo shows some of the new Material Design elements that have been added.</p>
+    <p>The following app shows some of the new Material Design components that have been added.</p>
 
-    <p>The second example shows the classic flat iOS based design.</p>
+    <ons-button onclick="location.href='material/index.html'" modifier="material--flat">
+      <ons-ripple color="rgba(0, 0, 0, 0.1)"></ons-ripple>
+      Material Design Demo
+    </ons-button>
 
-    <p>The final example shows off the new Web Components and how they can be used without Angular.</p>
+    <p>Onsen UI 2.0 is, unlike the previous version, not dependant on AngularJS. This means that it can easily be integrated with other frameworks.</p>
 
-    <ons-list modifier="material">
-      <ons-list-header modifier="material">Demos</ons-list-header>
-      <ons-list-item modifier="material" onclick="location.href='material.html'">
-        <ons-ripple color="rgba(0, 0, 0, 0.1)"></ons-ripple>
-        Material Design
-      </ons-list-item>
-      <ons-list-item modifier="material" onclick="location.href='flat.html'">
-        <ons-ripple color="rgba(0, 0, 0, 0.1)"></ons-ripple>
-        Flat Design
-      </ons-list-item>
-      <ons-list-item modifier="material" onclick="location.href='material.html'">
-        <ons-ripple color="rgba(0, 0, 0, 0.1)"></ons-ripple>
-        jQuery
-      </ons-list-item>
-    </ons-list>
+    <ons-button onclick="location.href='react/index.html'" modifier="material--flat">
+      <ons-ripple color="rgba(0, 0, 0, 0.1)"></ons-ripple>
+      React.js Demo
+    </ons-button>
+
+    <p>Onsen UI 2.0 also provides iOS-like flat design, just like Onsen UI 1.x</p>
+
+    <ons-button onclick="location.href='flat/index.html'" modifier="material--flat">
+      <ons-ripple color="rgba(0, 0, 0, 0.1)"></ons-ripple>
+      Flat Design Demo
+    </ons-button>
   </ons-page>
-
 </body>
 </html>

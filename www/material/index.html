@@ -4,98 +4,18 @@
     <meta charset="utf-8" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,300italic,300,400italic,500,700,700italic,500italic' rel='stylesheet' type='text/css'>
     <title>Onsen UI 2.0 Quickstart</title>
 
-    <link rel="stylesheet" href="lib/onsenui/css/onsenui.css" type="text/css" media="all" />
-    <link rel="stylesheet" href="lib/onsenui/css/onsen-css-components.css" type="text/css" media="all" />
-    <script src="lib/onsenui/js/onsenui.js"></script>
-    <script src="lib/angular/angular.js"></script>
-    <script src="lib/onsenui/js/angular-onsenui.js"></script>
+    <link rel="stylesheet" href="../lib/onsenui/css/onsenui.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="../lib/onsenui/css/onsen-css-components.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="app.css" type="text/css" media="all" />
 
-    <style>
-      .checkbox--material {
-        display: inline !important;
-        margin-right: 30px;
-      }
-
-      .page__background {
-        background-color: white;
-      }
-
-      ons-material-input {
-        display: inline;
-      }
-
-      #todo-title {
-        cursor: text;
-      }
-
-      .title {
-        transition: all 0.1s linear;
-      }
-
-      .done {
-        text-decoration: line-through;
-        opacity: 0.6;
-      }
-
-      ons-splitter-side {
-        box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
-      }
-    </style>
-
-    <script>
-      angular.module('app', ['onsen'])
-        .controller('TodoController', function($scope, $timeout) {
-          this.items = [
-            {
-              title: 'Water the plants',
-              done: false,
-            },
-            {
-              title: 'Walk the dog',
-              done: true,
-            },
-            {
-              title: 'Go to the dentist',
-              done: false,
-            },
-            {
-              title: 'Buy milk',
-              done: false,
-            },
-            {
-              title: 'Play tennis',
-              done: true,
-            }
-          ]
-
-          this.newTodo = function() {
-            this.items.push({
-              title: '',
-              done: false
-            });
-          }.bind(this);
-
-          this.focusInput = function(event) {
-            $timeout(function() {
-              var item = event.target.parentNode.querySelector('ons-material-input input');
-              item.focus();
-            });
-          }
-
-          this.clearCompleted = function() {
-            this.items = this.items.filter(function(item) {
-              return !item.done;
-            });
-          }.bind(this);
-
-          this.selectedItem = -1;
-        });
-    </script>
-
+    <script src="../lib/onsenui/js/onsenui.js"></script>
+    <script src="../lib/angular/angular.js"></script>
+    <script src="../lib/onsenui/js/angular-onsenui.js"></script>
+    <script src="app.js"></script>
 </head>
 
 <body>

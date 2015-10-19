@@ -38,6 +38,6 @@ gulp.task('serve', ['watch'], function() {
     ghostMode: false,
     notify: false,
     debounce: 200,
-    startPath: 'index.html'
+    index: 'index.html'
   });
 });

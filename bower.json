@@ -16,6 +16,6 @@
     "tests"
   ],
   "devDependencies": {
-    "onsenui": "2.0.0-alpha.2"
+    "onsenui": "2.0.0-alpha.3"
   }
 }
