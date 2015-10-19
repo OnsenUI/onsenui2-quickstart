@@ -33,7 +33,7 @@
 
     this.focusInput = function(event) {
       $timeout(function() {
-        var item = event.target.parentNode.querySelector('ons-material-input input');
+        var item = event.target.parentNode.querySelector('input[type="text"]');
         item.focus();
       });
     }
