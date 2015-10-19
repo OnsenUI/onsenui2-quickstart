@@ -35,6 +35,7 @@
       $timeout(function() {
         var item = event.target.parentNode.querySelector('input[type="text"]');
         item.focus();
+        item.select();
       });
     }
 
