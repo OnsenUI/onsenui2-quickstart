@@ -16,7 +16,7 @@
     "tests"
   ],
   "devDependencies": {
-    "onsenui": "2.0.0-alpha.4",
+    "onsenui": "2.0.0-alpha.5",
     "react": "~0.14.0"
   }
 }

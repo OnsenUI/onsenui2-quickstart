@@ -25,7 +25,7 @@ class TodoTitle extends React.Component {
     return (
       <span>
         { this.state.edit ?
-          <ons-material-input ref="titleInput" value={this.props.title} onBlur={this.toggleEdit.bind(this)} label="Title"></ons-material-input> :
+          <ons-material-input ref="titleInput" value={this.props.title} onBlur={this.toggleEdit.bind(this)}></ons-material-input> :
           <span className={this.props.done ? 'todo-text todo-text--done' : 'todo-text'} onClick={this.toggleEdit.bind(this)}>{this.props.title || 'Untitled'}</span>
         }
       </span>
