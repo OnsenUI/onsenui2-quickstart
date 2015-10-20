@@ -54,18 +54,18 @@
           <input type="text" class="text-input text-input--transparent todo-input" ng-show="todo.selectedItem == $index" ng-model="item.title" ng-blur="todo.selectedItem = -1" label="Title"></input>
           <span id="todo-title" class="title" ng-class="{ 'done': item.done }" ng-hide="todo.selectedItem == $index" ng-click="todo.selectedItem = $index; todo.focusInput($event)">{{ item.title || 'Untitled item' }}</span>
         </ons-list-item>
-        <ons-list-item style="text-align: center;">
-          <ons-button ng-click="todo.newTodo()" modifier="large">
-          Add Todo
-        </ons-button>
-        </ons-list-item>
-        <ons-list-item style="text-align: center;">
-          <ons-button ng-click="todo.clearCompleted()" modifier="large--quiet">
-          Clear completed
-        </ons-button>
-        </ons-list-item>
 
       </ons-list>
+      <p>
+        <ons-button ng-click="todo.newTodo()" modifier="large">
+          Add Todo
+        </ons-button>
+      </p>
+      <p>
+        <ons-button ng-click="todo.clearCompleted()" modifier="large--quiet">
+          Clear completed
+        </ons-button>
+      </p>
     </ons-page>
   </ons-template>
 </body>

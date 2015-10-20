@@ -16,8 +16,7 @@
     "tests"
   ],
   "devDependencies": {
-    "onsenui": "2.0.0-alpha.3",
-    "react": "~0.14.0",
-    "jquery": "~2.1.4"
+    "onsenui": "2.0.0-alpha.4",
+    "react": "~0.14.0"
   }
 }

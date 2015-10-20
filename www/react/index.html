@@ -15,7 +15,6 @@
     <script src="../lib/onsenui/js/onsenui.js"></script>
     <script src="../lib/react/react.js"></script>
     <script src="../lib/react/react-dom.js"></script>
-    <script src="../lib/jquery/dist/jquery.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
 
     <style>
@@ -23,9 +22,53 @@
         display: inline !important;
         margin-right: 30px;
       }
+
+      .todo-text {
+        cursor: text;
+      }
+
+      .todo-text--done {
+        text-decoration: line-through;
+        opacity: 0.6;
+      }
     </style>
 
     <script type="text/babel">
+      var TodoTitle = React.createClass({
+        getInitialState: function() {
+          return {
+            edit: false
+          };
+        },
+        toggleEdit: function() {
+          this.setState({edit: !this.state.edit});
+        },
+        componentDidMount: function() {
+          // $(ReactDOM.findDOMNode(this)).on('change', 'ons-material-input', this.onTitleChange, true);
+          ReactDOM.findDOMNode(this).addEventListener('change', this.props.onChange, true);
+        },
+        componentWillUnmount: function() {
+          ReactDOM.findDOMNode(this).removeEventListener('change', this.props.onChange, true);
+        },
+        componentDidUpdate: function() {
+          // Focus the input.
+          if (this.state.edit) {
+            this.refs.titleInput.querySelector('input').focus();
+            this.refs.titleInput.querySelector('input').select();
+          }
+        },
+        render: function() {
+          return (
+            <span>
+              { this.state.edit ?
+                <ons-material-input ref="titleInput" value={this.props.title} onBlur={this.toggleEdit} label="Title"></ons-material-input> :
+                <span className={this.props.done ? 'todo-text todo-text--done' : 'todo-text'} onClick={this.toggleEdit}>{this.props.title || 'Untitled'}</span>
+              }
+            </span>
+          );
+        }
+      });
+
       var TodoItem = React.createClass({
         getInitialState: function() {
           return {
@@ -38,18 +81,6 @@
         onTitleChange: function(event) {
           this.props.onTitleChange(event.target.value);
         },
-        componentDidMount: function() {
-          $(ReactDOM.findDOMNode(this)).on('change', 'ons-material-input', this.onTitleChange);
-        },
-        componentWillUnmount: function() {
-          $(ReactDOM.findDOMNode(this)).off('change', 'ons-material-input', this.onTitleChange);
-        },
-        componentDidUpdate: function() {
-          // Focus the input.
-          if (this.state.edit) {
-            this.refs.titleInput.querySelector('input').focus();
-          }
-        },
         render: function() {
           return (
             <ons-list-item modifier="material">
@@ -57,10 +88,7 @@
                 <input type="checkbox" checked={this.props.done} onChange={this.props.onToggle} className="checkbox__input checkbox--material__input" />
                 <div className="checkbox__checkmark checkbox--material__checkmark"></div>
               </label>
-              { this.state.edit ?
-                <ons-material-input ref="titleInput" onChange={this.onTitleChange} onBlur={this.toggleEdit} label="Title"></ons-material-input> :
-                <span onClick={this.toggleEdit}>{this.props.title}</span>
-              }
+              <TodoTitle done={this.props.done} title={this.props.title} onChange={this.onTitleChange} />
             </ons-list-item>
           );
         }
@@ -103,20 +131,49 @@
           todos[i].title = title;
           this.setState({todos: todos});
         },
+        addTodo: function() {
+          var todos = this.state.todos;
+          todos.push({
+            title: '',
+            done: false
+          });
+
+          this.setState({todos: todos});
+        },
+        clearCompleted: function() {
+          var todos = this.state.todos
+            .filter(function(todo) {
+              return !todo.done;
+            });
+
+          this.setState({todos: todos});
+        },
         render: function() {
           return (
-            <ons-list modifier="material">
-              <ons-list-header modifier="material">Things to do</ons-list-header>
-              {this.state.todos.map(function(todo, i) {
-                  return <TodoItem
-                    key={i}
-                    onToggle={this.toggleItem.bind(this, i)}
-                    onTitleChange={this.titleChange.bind(this, i)}
-                    done={todo.done}
-                    title={todo.title}>
-                  </TodoItem>
-              }.bind(this))}
-            </ons-list>
+            <ons-page modifier="material">
+              <ons-toolbar modifier="material">
+                <div className="center">Todos</div>
+              </ons-toolbar>
+              <ons-list modifier="material">
+                <ons-list-header modifier="material">Things to do</ons-list-header>
+                {this.state.todos.map(function(todo, i) {
+                    return <TodoItem
+                      key={i}
+                      onToggle={this.toggleItem.bind(this, i)}
+                      onTitleChange={this.titleChange.bind(this, i)}
+                      done={todo.done}
+                      title={todo.title}>
+                    </TodoItem>
+                }.bind(this))}
+                <ons-list-item style={{textAlign: 'center'}} modifier="material">
+                  <ons-button onClick={this.clearCompleted} modifier="material--flat">Clear completed</ons-button>
+                </ons-list-item>
+              </ons-list>
+              <ons-fab onClick={this.addTodo} position="bottom right">
+                <ons-ripple></ons-ripple>
+                <ons-icon icon="md-plus"></ons-icon>
+              </ons-fab>
+            </ons-page>
           );
         }
       });
@@ -126,14 +183,6 @@
 </head>
 
 <body>
-  <ons-page>
-    <ons-toolbar modifier="material">
-      <div class="center">
-        Todos
-      </div>
-    </ons-toolbar>
-
-    <div id="app"></div>
-  </ons-page>
+  <div id="app"></div>
 </body>
 </html>
