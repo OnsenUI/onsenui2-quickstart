@@ -33,7 +33,7 @@ gulp.task('serve', ['watch'], function() {
   browserSync.init({
     server: {
       baseDir: __dirname + '/www/',
-      directory: true
+      directory: false
     },
     ghostMode: false,
     notify: false,
