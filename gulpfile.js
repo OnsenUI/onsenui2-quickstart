@@ -1,19 +1,11 @@
 var gulp = require('gulp'),
     bower = require('gulp-bower'),
-    filter = require('gulp-filter'),
-    rename = require('gulp-rename'),
     rimraf = require('rimraf'),
     serve = require('gulp-serve'),
     browserSync = require('browser-sync').create();
 
 gulp.task('install', ['clean'], function(cb) {
-  var myFilter = filter(['jquery/**', 'react/**', 'angular/**', 'onsenui/build/{js,css}/**']);
-
   return bower()
-    .pipe(myFilter)
-    .pipe(rename(function(file) {
-      file.dirname = file.dirname.replace(/^onsenui\/build/, 'onsenui');
-    }))
     .pipe(gulp.dest('www/lib/'));
 });
 
