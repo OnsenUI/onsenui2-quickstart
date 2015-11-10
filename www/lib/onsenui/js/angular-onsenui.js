@@ -1,4 +1,4 @@
-/*! angular-onsenui.js for onsenui - v2.0.0-alpha.5 - 2015-10-20 */
+/*! angular-onsenui.js for onsenui - v2.0.0-alpha.15 - 2015-11-10 */
 (function(module) {
 try { module = angular.module('templates-main'); }
 catch(err) { module = angular.module('templates-main', []); }
@@ -2949,7 +2949,7 @@ limitations under the License.
         }
 
         if (this._isInsideIgnoredElement(event.target)){
-          event.gesture.stopDetect();
+          this._deactivateGestureDetector();
         }
 
         switch (event.type) {
@@ -3861,7 +3861,8 @@ limitations under the License.
           'toggleRight',
           'toggleLeft',
           'rightIsOpened',
-          'leftIsOpened'
+          'leftIsOpened',
+          'loadContentPage'
         ]);
 
         scope.$on('$destroy', this._destroy.bind(this));
@@ -4001,6 +4002,7 @@ limitations under the License.
         this._element = element;
         this._attrs = attrs;
         this._lastPageElement = null;
+        this._lastPageScope = null;
 
         this._scope.$on('$destroy', this._destroy.bind(this));
 
@@ -4015,10 +4017,6 @@ limitations under the License.
           'loadPage'
         ]);
 
-        this._boundOnPrechange = this._onPrechange.bind(this);
-        this._boundOnPostchange = this._onPostchange.bind(this);
-        this._element.on('prechange', this._boundOnPrechange);
-        this._element.on('postchange', this._boundOnPostchange);
       },
 
       _compileAndLink: function(pageElement, callback) {
@@ -4031,21 +4029,8 @@ limitations under the License.
         });
       },
 
-      _onPrechange: function(event) {
-        this._lastPageElement = this._element[0]._getCurrentPageElement();
-      },
-
-      _onPostchange: function(event) {
-        if (this._lastPageElement && !this._lastPageElement.parentNode) {
-          angular.element(this._lastPageElement).scope().$destroy();
-        }
-      },
-
       _destroy: function() {
         this.emit('destroy');
-
-        element.off(this._boundOnPrechange);
-        element.off(this._boundOnPostchange);
 
         this._clearDerivingEvents();
         this._clearDerivingMethods();
@@ -4482,7 +4467,7 @@ limitations under the License.
  * @ngdoc directive
  * @id back_button
  * @name ons-back-button
- * @category toolbar
+ * @category page
  * @description
  *   [en]Back button component for ons-toolbar. Can be used with ons-navigator to provide back button support.[/en]
  *   [ja]ons-toolbarに配置できる「戻るボタン」用コンポーネントです。ons-navigatorと共に使用し、ページを1つ前に戻る動作を行います。[/ja]
@@ -4548,7 +4533,7 @@ limitations under the License.
  * @ngdoc directive
  * @id bottom_toolbar
  * @name ons-bottom-toolbar
- * @category toolbar
+ * @category page
  * @description
  *   [en]Toolbar component that is positioned at the bottom of the page.[/en]
  *   [ja]ページ下部に配置されるツールバー用コンポーネントです。[/ja]
@@ -5988,8 +5973,8 @@ limitations under the License.
  * @category util
  * @extensionOf angular
  * @description
- *    [en]Conditionally display content depending on the platform / browser. Valid values are "ios", "android", "blackberry", "chrome", "safari", "firefox", and "opera".[/en]
- *    [ja]プラットフォームやブラウザーに応じてコンテンツの制御をおこないます。ios, android, blackberry, chrome, safari, firefox, operaのいずれかの値を空白区切りで複数指定できます。[/ja]
+ *    [en]Conditionally display content depending on the platform / browser. Valid values are "opera", "firefox", "safari", "chrome", "ie", "edge", "android", "blackberry", "ios" and "wp".[/en]
+ *    [ja]プラットフォームやブラウザーに応じてコンテンツの制御をおこないます。opera, firefox, safari, chrome, ie, edge, android, blackberry, ios, wpのいずれかの値を空白区切りで複数指定できます。[/ja]
  * @seealso ons-if-orientation [en]ons-if-orientation component[/en][ja]ons-if-orientationコンポーネント[/ja]
  * @guide UtilityAPIs [en]Other utility APIs[/en][ja]他のユーティリティAPI[/ja]
  * @example
@@ -6005,8 +5990,8 @@ limitations under the License.
  * @initonly
  * @extensionOf angular
  * @description
- *   [en]One or multiple space separated values: "opera", "firefox", "safari", "chrome", "ie", "android", "blackberry", "ios" or "wp".[/en]
- *   [ja]"opera", "firefox", "safari", "chrome", "ie", "android", "blackberry", "ios", "wp"のいずれか空白区切りで複数指定できます。[/ja]
+ *   [en]One or multiple space separated values: "opera", "firefox", "safari", "chrome", "ie", "edge", "android", "blackberry", "ios" or "wp".[/en]
+ *   [ja]"opera", "firefox", "safari", "chrome", "ie", "edge", "android", "blackberry", "ios", "wp"のいずれか空白区切りで複数指定できます。[/ja]
  */
 
 (function() {
@@ -6093,7 +6078,12 @@ limitations under the License.
             return 'safari';
           }
 
-          var isChrome = !!window.chrome && !isOpera; // Chrome 1+
+          var isEdge = navigator.userAgent.indexOf(' Edge/') >= 0;
+          if (isEdge) {
+            return 'edge';
+          }
+
+          var isChrome = !!window.chrome && !isOpera && !isEdge; // Chrome 1+
           if (isChrome) {
             return 'chrome';
           }
@@ -7322,7 +7312,7 @@ limitations under the License.
  * @ngdoc directive
  * @id page
  * @name ons-page
- * @category base
+ * @category page
  * @description
  *   [en]Should be used as root component of each page. The content inside page component is scrollable.[/en]
  *   [ja]ページ定義のためのコンポーネントです。このコンポーネントの内容はスクロールが許可されます。[/ja]
@@ -7558,10 +7548,13 @@ limitations under the License.
             element.data('ons-page', page);
             $onsen.addModifierMethodsForCustomElements(page, element);
 
+            element.data('_scope', scope);
+
             $onsen.cleaner.onDestroy(scope, function() {
               page._events = undefined;
               $onsen.removeModifierMethods(page);
               element.data('ons-page', undefined);
+              element.data('_scope', undefined);
 
               $onsen.clearComponent({
                 element: element,
@@ -8504,7 +8497,7 @@ limitations under the License.
  * @ngdoc directive
  * @id scroller
  * @name ons-scroller
- * @category base
+ * @category page
  * @description
  *   [en]Makes the content inside this tag scrollable.[/en]
  *   [ja]要素内をスクロール可能にします。[/ja]
@@ -8988,6 +8981,179 @@ limitations under the License.
     };
   }]);
 })();
+
+/**
+ * @ngdoc directive
+ * @id speed-dial
+ * @name ons-speed-dial
+ * @category speeddial
+ * @description
+ *   [en]Element that displays a Material Design Speed Dialog component.[/en]
+ *   [ja]Material DesignのSpeed dialコンポーネントを表現する要素です。[/ja]
+ * @seealso ons-speed-dial-item
+ *   [en]ons-speed-dial-item component[/en]
+ *   [ja]ons-speed-dial-itemコンポーネント[/ja]
+ * @example
+ * <ons-speed-dial position="left bottom">
+ *   <ons-icon
+ *     icon="fa-twitter"
+ *     size="26px"
+ *     fixed-width="false"
+ *     style="vertical-align:middle;">
+ *   </ons-icon>
+ *   <ons-speed-dial-item><ons-ripple></ons-ripple>C</ons-speed-dial-item>
+ *   <ons-speed-dial-item><ons-ripple></ons-ripple>B</ons-speed-dial-item>
+ *   <ons-speed-dial-item><ons-ripple></ons-ripple>A</ons-speed-dial-item>
+ * </ons-speed-dial>
+ */
+
+/**
+ * @ngdoc attribute
+ * @name position
+ * @type {String}
+ * @description
+ *   [en]
+ *     Specify the vertical and horizontal position of the component.
+ *     I.e. to display it in the top right corner specify "right top".
+ *     Choose from "right", "left", "top" and "bottom".
+ *   [/en]
+ *   [ja]
+ *     この要素を表示する左右と上下の位置を指定します。
+ *     例えば、右上に表示する場合には"right top"を指定します。
+ *     左右と上下の位置の指定には、rightとleft、topとbottomがそれぞれ指定できます。
+ *   [/ja]
+ */
+
+/**
+ * @ngdoc attribute
+ * @name direction
+ * @type {String}
+ * @description
+ *   [en]Specify the direction the items are displayed. Possible values are "up", "down", "left" and "right".[/en]
+ *   [ja]
+ *     要素が表示する方向を指定します。up, down, left, rightが指定できます。
+ *   [/ja]
+ */
+
+/**
+ * @ngdoc attribute
+ * @name disabled
+ * @description
+ *   [en]Specify if button should be disabled.[/en]
+ *   [ja]無効化する場合に指定します。[/ja]
+ */
+
+/**
+ * @ngdoc method
+ * @signature show()
+ * @description
+ *   [en]Show the speed dial.[/en]
+ *   [ja]Speed dialを表示します。[/ja]
+ */
+
+/**
+ * @ngdoc method
+ * @signature hide()
+ * @description
+ *   [en]Hide the speed dial.[/en]
+ *   [ja]Speed dialを非表示にします。[/ja]
+ */
+
+/**
+ * @ngdoc method
+ * @signature showItems()
+ * @description
+ *   [en]Show the speed dial items.[/en]
+ *   [ja]Speed dialの子要素を表示します。[/ja]
+ */
+
+/**
+ * @ngdoc method
+ * @signature hideItems()
+ * @description
+ *   [en]Hide the speed dial items.[/en]
+ *   [ja]Speed dialの子要素を非表示にします。[/ja]
+ */
+
+/**
+ * @ngdoc method
+ * @signature toggle()
+ * @description
+ *   [en]Toggle visibility.[/en]
+ *   [ja]Speed dialの表示非表示を切り替えます。[/ja]
+ */
+
+/**
+ * @ngdoc method
+ * @signature toggleItems()
+ * @description
+ *   [en]Toggle item visibility.[/en]
+ *   [ja]Speed dialの子要素の表示非表示を切り替えます。[/ja]
+ */
+
+/**
+ * @ngdoc method
+ * @signature setDisabled(disabled)
+ * @description
+ *   [en]Disable or enable the element.[/en]
+ *   [ja]disabled状態にするかどうかを設定します。[/ja]
+ */
+
+/**
+ * @ngdoc method
+ * @signature isDisabled()
+ * @return {Boolean}
+ *   [en]true if the element is disabled.[/en]
+ *   [ja]disabled状態になっているかどうかを返します。[/ja]
+ * @description
+ *   [en]Returns whether the component is enabled or not.[/en]
+ *   [ja]この要素を無効化するかどうかを指定します。[/ja]
+ */
+
+/**
+ * @ngdoc method
+ * @signature isInline()
+ * @description
+ *   [en]Returns whether the component is inline or not.[/en]
+ *   [ja]この要素がインライン要素かどうかを返します。[/ja]
+ */
+
+/**
+ * @ngdoc method
+ * @signature isShown()
+ * @return {Boolean}
+ *   [en]True if the component is visible.[/en]
+ *   [ja]表示されているかどうかを返します。[/ja]
+ * @description
+ *   [en]Return whether the component is visible or not.[/en]
+ *   [ja]表示されているかどうかを返します。[/ja]
+ */
+
+/**
+ * @ngdoc directive
+ * @id speed-dial-item
+ * @name ons-speed-dial-item
+ * @category speeddial
+ * @description
+ *   [en]This component displays the child elements of the Material Design Speed dial component.[/en]
+ *   [ja]Material DesignのSpeed dialの子要素を表現する要素です。[/ja]
+ * @seealso ons-speed-dial
+ *   [en]ons-speed-dial component[/en]
+ *   [ja]ons-speed-dialコンポーネント[/ja]
+ * @example
+ * <ons-speed-dial position="left bottom">
+ *   <ons-icon
+ *     icon="fa-twitter"
+ *     size="26px"
+ *     fixed-width="false"
+ *     style="vertical-align:middle;">
+ *   </ons-icon>
+ *   <ons-speed-dial-item><ons-ripple></ons-ripple>C</ons-speed-dial-item>
+ *   <ons-speed-dial-item><ons-ripple></ons-ripple>B</ons-speed-dial-item>
+ *   <ons-speed-dial-item><ons-ripple></ons-ripple>A</ons-speed-dial-item>
+ * </ons-speed-dial>
+ */
+
 
 /**
  * @ngdoc directive
@@ -9852,10 +10018,10 @@ limitations under the License.
 
 /**
  * @ngdoc attribute
- * @name threhold-ratio-should-open
+ * @name threshold-ratio-should-open
  * @type {Number}
  * @description
- *  [en][/en]
+ *  [en]Specify how much the menu needs to be swiped before opening. A value between 0 and 1. Default is 0.3.[/en]
  *  [ja]どのくらいスワイプすればスライディングメニューを開くかどうかの割合を指定します。0から1の間の数値を指定します。スワイプの距離がここで指定した数値掛けるこの要素の幅よりも大きければ、スワイプが終わった時にこの要素を開きます。デフォルトは0.3です。[/ja]
  */
 
@@ -10264,7 +10430,7 @@ limitations under the License.
             scope : scope,
             attrs : attrs
           });
-          checkbox = element = attrs = scope = null;
+          element = attrs = scope = null;
         });
 
         $onsen.fireComponentEvent(element[0], 'init');
@@ -10771,6 +10937,12 @@ limitations under the License.
     });
   };
 
+  var lastUnlink = window.OnsTabbarElement.rewritables.unlink;
+  window.OnsTabbarElement.rewritables.unlink = function(tabbarElement, target, callback) {
+    angular.element(target).data('_scope').$destroy();
+    lastUnlink(tabbarElement, target, callback);
+  };
+
   angular.module('onsen').directive('onsTabbar', ['$onsen', '$compile', '$parse', 'TabbarView', function($onsen, $compile, $parse, TabbarView) {
 
     return {
@@ -10846,7 +11018,7 @@ limitations under the License.
  * @ngdoc directive
  * @id toolbar
  * @name ons-toolbar
- * @category toolbar
+ * @category page
  * @modifier transparent
  *   [en]Transparent toolbar[/en]
  *   [ja]透明な背景を持つツールバーを表示します。[/ja]
@@ -10957,7 +11129,7 @@ limitations under the License.
  * @ngdoc directive
  * @id toolbar_button
  * @name ons-toolbar-button
- * @category toolbar
+ * @category page
  * @modifier outline
  *   [en]A button with an outline.[/en]
  *   [ja]アウトラインをもったボタンを表示します。[/ja]
@@ -12271,6 +12443,15 @@ limitations under the License.
  * @description 
  *   [en]Returns whether the browser is Internet Explorer.[/en]
  *   [ja]Internet Explorer上で実行されているかどうかを返します。[/ja]
+ * @return {Boolean}
+ */
+
+/**
+ * @ngdoc method
+ * @signature isEdge()
+ * @description 
+ *   [en]Returns whether the browser is Edge.[/en]
+ *   [ja]Edge上で実行されているかどうかを返します。[/ja]
  * @return {Boolean}
  */
 
