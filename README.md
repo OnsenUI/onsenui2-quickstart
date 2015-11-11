@@ -44,6 +44,8 @@ When everything is set up, you can plug in your Android device using USB and dep
 cordova run android
 ```
 
+If you want to deploy to an iOS device the prodecure is almost the same. Keep in mind that in order to deploy to an iOS device you need a Mac computer with XCode installed.
+
 ## Bug reports and issues
 
 Onsen UI 2.0 is still in beta. We want to make it as good as possible before releasing the stable version. If you find any bugs or if you have any suggestions on how to improve it, please [open an issue](https://github.com/OnsenUI/OnsenUI/issues/new) on GitHub.
