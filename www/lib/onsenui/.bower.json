@@ -21,21 +21,19 @@
     "component",
     "monaca"
   ],
-  "dependencies": {
-    "angular": "~1.4.3"
-  },
+  "dependencies": {},
   "license": "Apache License, Version 2.0",
   "ignore": [
     ".npmignore"
   ],
-  "version": "2.0.0-beta",
-  "_release": "2.0.0-beta",
+  "version": "2.0.0-beta.1",
+  "_release": "2.0.0-beta.1",
   "_resolution": {
     "type": "version",
-    "tag": "2.0.0-beta",
-    "commit": "138ae7ce63de3215c594960e784238869d513246"
+    "tag": "2.0.0-beta.1",
+    "commit": "16bad9529a6ce0c8fc8580bd725cae8eb0930e09"
   },
   "_source": "git://github.com/OnsenUI/OnsenUI-dist.git",
-  "_target": "2.0.0-beta",
+  "_target": "2.0.0-beta.1",
   "_originalSource": "onsenui"
 }
