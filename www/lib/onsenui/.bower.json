@@ -26,14 +26,14 @@
   "ignore": [
     ".npmignore"
   ],
-  "version": "2.0.0-beta.1",
-  "_release": "2.0.0-beta.1",
+  "version": "2.0.0-beta.5",
+  "_release": "2.0.0-beta.5",
   "_resolution": {
     "type": "version",
-    "tag": "2.0.0-beta.1",
-    "commit": "16bad9529a6ce0c8fc8580bd725cae8eb0930e09"
+    "tag": "2.0.0-beta.5",
+    "commit": "7ec0aeb1f8f6f3b38357c3e00f9b336b76797e85"
   },
   "_source": "git://github.com/OnsenUI/OnsenUI-dist.git",
-  "_target": "2.0.0-beta.1",
+  "_target": "2.0.0-beta.5",
   "_originalSource": "onsenui"
 }

@@ -2,6 +2,44 @@
 CHANGELOG
 ====
 
+v2.0.0-beta.5
+----
+ * core: Add link to library in package.json for browserify, etc.
+
+v2.0.0-beta.4
+----
+ * ons-tabbar: Fixed [#1132](https://github.com/OnsenUI/OnsenUI/issues/1132).
+ * ons-tabbar: `no-reload` is now the default behavior.
+ * ons-ripple: Fixed [#1140](https://github.com/OnsenUI/OnsenUI/issues/1140).
+ * ons-navigator: Fixed Fade animator export.
+ * ons-material-input: Make it resizable.
+ * Added ons-lazy-repeat custom element.
+ * core: Use [rollup.js](http://rollupjs.org/) for bundling.
+ * ons-tabbar: Fixed [#1158](https://github.com/OnsenUI/OnsenUI/issues/1158).
+ * ons-lazy-repeat: Remove "display: block" rule for Angular bindings.
+
+v2.0.0-beta.3
+----
+ * core: Fixed animationOptions parsing.
+ * ons-back-button: Add "material" modifier.
+ * ons-range: Fixed [#1082](https://github.com/OnsenUI/OnsenUI/issues/1082).
+ * ons-popover: Added callback for `show` and `hide` methods.
+ * ons-back-button: Accepts `options` object. Fixed [#1040](https://github.com/OnsenUI/OnsenUI/issues/1040).
+ * ons-list-item: Fixed "tappable" modifier behavior on iOS. Fixed [#740](https://github.com/OnsenUI/OnsenUI/issues/740).
+ * core: Implemented ES6 imports.
+ * css-components: Fixed flexbox for MD styles in toolbar.
+ * core: Fixed [#1085](https://github.com/OnsenUI/OnsenUI/issues/1085)
+ * ons-alert-dialog: [BC] Changed DOM structure to improve performance. Fixed [#1008](https://github.com/OnsenUI/OnsenUI/issues/1008).
+ * ons-dialog: [BC] Changed DOM structure to improve performance.
+ * ons-dialog, ons-alert-dialog, ons-popover: removed iOS shadow to match the original.
+ * Changed the directory structure.
+ * ons-list-item: Add "tappable" attribute.
+ * ons-list-item: Add child classes to make it easier to compose lists.
+
+v2.0.0-beta.2
+----
+ * css-components: Adjust Material navbar layout.
+
 v2.0.0-beta.1
 ----
  * ons-fab: Fix broken layout on Safari.

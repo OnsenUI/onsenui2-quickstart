@@ -40,11 +40,15 @@ class TodoItem extends React.Component {
   render() {
     return (
       <ons-list-item modifier="material">
-        <label className="checkbox checkbox--material todo-checkbox">
-          <input type="checkbox" checked={this.props.done} onChange={this.props.onToggle} className="checkbox__input checkbox--material__input" />
-          <div className="checkbox__checkmark checkbox--material__checkmark"></div>
-        </label>
-        <TodoTitle done={this.props.done} title={this.props.title} onChange={this.onTitleChange.bind(this)} />
+        <div className="list__item__left">
+          <label className="checkbox checkbox--material todo-checkbox">
+            <input type="checkbox" checked={this.props.done} onChange={this.props.onToggle} className="checkbox__input checkbox--material__input" />
+            <div className="checkbox__checkmark checkbox--material__checkmark"></div>
+          </label>
+        </div>
+        <div className="list__item__center">
+          <TodoTitle done={this.props.done} title={this.props.title} onChange={this.onTitleChange.bind(this)} />
+        </div>
       </ons-list-item>
     );
   }

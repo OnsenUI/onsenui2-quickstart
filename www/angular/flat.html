@@ -51,12 +51,16 @@
       <ons-list>
         <ons-list-header>Things to do</ons-list-header>
         <ons-list-item ng-repeat="item in todo.items">
+          <div class="list__item__left">
           <label class="checkbox">
             <input type="checkbox" ng-model="item.done" class="checkbox__input">
             <div class="checkbox__checkmark"></div>
           </label>
-          <input type="text" class="text-input text-input--transparent todo-input" ng-show="todo.selectedItem == $index" ng-model="item.title" ng-blur="todo.selectedItem = -1" label="Title"></input>
-          <span id="todo-title" class="title" ng-class="{ 'done': item.done }" ng-hide="todo.selectedItem == $index" ng-click="todo.selectedItem = $index; todo.focusInput($event)">{{ item.title || 'Untitled item' }}</span>
+          </div>
+          <div class="list__item__center">
+            <input type="text" class="text-input text-input--transparent todo-input" ng-show="todo.selectedItem == $index" ng-model="item.title" ng-blur="todo.selectedItem = -1" label="Title"></input>
+            <span id="todo-title" class="title" ng-class="{ 'done': item.done }" ng-hide="todo.selectedItem == $index" ng-click="todo.selectedItem = $index; todo.focusInput($event)">{{ item.title || 'Untitled item' }}</span>
+          </div>
         </ons-list-item>
 
       </ons-list>

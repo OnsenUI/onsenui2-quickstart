@@ -1,30 +1,11 @@
-.checkbox--material {
-  display: inline !important;
-  margin-right: 20px;
-}
-
-.page__background {
-  background-color: white;
-}
-
-ons-material-input {
-  display: inline;
-  position: relative;
-  top: -3px;
-}
-
 ons-list-item[modifier="material"] {
   min-height: 52px !important;
 }
 
-ons-list-item[modifier="material"] #todo-title {
-  position: relative;
-  top: -2px;
-  letter-spacing: -0.4px;
-}
-
 #todo-title {
   cursor: text;
+  height: 24px;
+  line-height: 24px;
 }
 
 .title {
@@ -41,6 +22,6 @@ ons-splitter-side {
 }
 
 .todo-input {
+  margin-top: -2px;
   font-size: 17px;
-  margin-top: 4px;
 }
